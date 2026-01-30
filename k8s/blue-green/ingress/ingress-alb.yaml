@@ -4,14 +4,16 @@ metadata:
   name: blue-green-ingress
   namespace: blue-green-deployment
   annotations:
-    kubernetes.io/ingress.class: alb
+    # Remove deprecated kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/healthcheck-path: /health
+    # Action for traffic splitting (80% blue, 20% green/canary)
     alb.ingress.kubernetes.io/actions.forward-to-canary: >
       {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"service-blue","servicePort":"80","weight":80},{"serviceName":"service-green","servicePort":"80","weight":20}]}}
 spec:
+  ingressClassName: alb  # ← This replaces the deprecated annotation (recommended)
   rules:
     - http:
         paths:
@@ -19,11 +21,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: forward-to-canary
+                name: forward-to-canary  # Must match the ${action-name} part exactly
                 port:
-                  name: use-annotation
-  # Uncomment the following section if you want to enable SSL
-  # tls:
+                  name: use-annotation   # Special name telling controller to use the action annotation
+  # tls:  # Uncomment/enable when ready for HTTPS
   #   - hosts:
   #       - your-domain.com
   #     secretName: tls-secret
