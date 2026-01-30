@@ -11,7 +11,7 @@ metadata:
     alb.ingress.kubernetes.io/healthcheck-path: /health
     # Action for traffic splitting (80% blue, 20% green/canary)
     alb.ingress.kubernetes.io/actions.forward-to-canary: >
-      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"service-blue","servicePort":"80","weight":80},{"serviceName":"service-green","servicePort":"80","weight":20}]}}
+      {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"service-blue","servicePort":"80","weight":50},{"serviceName":"service-green","servicePort":"80","weight":50}]}}
 spec:
   ingressClassName: alb  # ← This replaces the deprecated annotation (recommended)
   rules:
