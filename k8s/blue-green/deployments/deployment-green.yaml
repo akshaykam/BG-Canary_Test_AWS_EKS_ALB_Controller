@@ -5,24 +5,9 @@ metadata:
   namespace: blue-green-deployment
   labels:
     app: my-python-app
-    version: green
+        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:green
 spec:
   replicas: 3
-  selector:
-    matchLabels:
-      app: my-python-app
-      version: green
-  template:
-    metadata:
-      labels:
-        app: my-python-app
-        version: green
-    spec:
-      containers:
-      - name: my-python-app
-        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:latest
-        ports:
-        - containerPort: 8000
         env:
         - name: ENV
           valueFrom:
@@ -39,6 +24,33 @@ spec:
             configMapKeyRef:
               name: app-config
               key: FEATURE_FLAG
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secret
+              key: api-key
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secret
+              key: db-password
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 20
         - name: DATABASE_URL
           valueFrom:
             configMapKeyRef:

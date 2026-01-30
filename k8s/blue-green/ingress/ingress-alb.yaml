@@ -8,7 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-path: /health
     alb.ingress.kubernetes.io/actions.forward-to-canary: >
       {"type":"forward","forwardConfig":{"targetGroups":[{"serviceName":"service-blue","servicePort":"80","weight":80},{"serviceName":"service-green","servicePort":"80","weight":20}]}}
 spec:

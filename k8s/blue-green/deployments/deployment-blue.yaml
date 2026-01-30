@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: my-python-app
-        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:latest
+        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:blue
         ports:
         - containerPort: 8000
         env:
@@ -54,3 +54,15 @@ spec:
             secretKeyRef:
               name: my-app-secret
               key: db-password
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 20
