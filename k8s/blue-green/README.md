@@ -67,6 +67,7 @@ Blue-green deployment is a strategy that reduces downtime and risk by running tw
 
 ## Notes
 
+- This app is UI-only; ConfigMap includes only optional `ENV` and `LOG_LEVEL`. Secrets and any database-related keys are not used.
 - Ensure your EKS cluster has the AWS Load Balancer Controller installed and the required IAM roles (see repository `iam_policy.json` and `trust-policy.json`).
 - Use `service-blue` and `service-green` in the `blue-green-deployment` namespace; ALB routes traffic via the forward action.
 - Build and push the Docker image to ECR before deploying, and update the `image` fields in the deployments.
@@ -90,3 +91,20 @@ Blue-green deployment is a strategy that reduces downtime and risk by running tw
   ```
 
 3. Update `deployment-blue.yaml` and `deployment-green.yaml` `image` fields with the ECR URIs.
+
+### Apply Manifests (UI-only)
+
+```bash
+kubectl apply -f k8s/blue-green/network/namespace.yaml
+
+# Optional: apply minimal configmap (ENV/LOG_LEVEL) if desired
+kubectl apply -f k8s/blue-green/config/configmap.yaml
+
+kubectl apply -f k8s/blue-green/deployments/deployment-blue.yaml
+kubectl apply -f k8s/blue-green/services/service-blue.yaml
+
+kubectl apply -f k8s/blue-green/deployments/deployment-green.yaml
+kubectl apply -f k8s/blue-green/services/service-green.yaml
+
+kubectl apply -f k8s/blue-green/ingress/ingress-alb.yaml
+```

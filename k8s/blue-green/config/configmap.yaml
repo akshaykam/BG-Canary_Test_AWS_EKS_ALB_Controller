@@ -4,7 +4,5 @@ metadata:
   name: app-config
   namespace: blue-green-deployment
 data:
-  ENV: "production"          # quotes optional here but good habit
+  ENV: "production"
   LOG_LEVEL: "info"
-  DATABASE_URL: "your-database-url"
-  FEATURE_FLAG: "true"       # ← must be string "true" (or "false")
