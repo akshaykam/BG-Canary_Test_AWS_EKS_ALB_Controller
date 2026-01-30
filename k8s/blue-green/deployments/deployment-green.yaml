@@ -19,30 +19,30 @@ spec:
         version: green
     spec:
       containers:
-      - name: my-python-app
-        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:green
-        ports:
-        - containerPort: 8000
-        env:
-        - name: ENV
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: ENV
-        - name: LOG_LEVEL
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: LOG_LEVEL
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 5
-          periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8000
-          initialDelaySeconds: 10
-          periodSeconds: 20
+        - name: my-python-app
+          image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:green
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: ENV
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: LOG_LEVEL
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
