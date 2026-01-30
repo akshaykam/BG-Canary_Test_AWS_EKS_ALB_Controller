@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app-blue
+  namespace: blue-green-deployment
+  labels:
+    app: my-python-app
+    version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-python-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+        version: blue
+    spec:
+      containers:
+      - name: my-python-app
+        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: ENV
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: LOG_LEVEL
+        - name: FEATURE_FLAG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: FEATURE_FLAG
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: DATABASE_URL
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secret
+              key: api-key
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secret
+              key: db-password

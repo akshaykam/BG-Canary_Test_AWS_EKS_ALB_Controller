@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traffic-weights
+  namespace: blue-green-deployment
+data:
+  weights: |
+    {
+      "blue": 70,
+      "green": 30
+    }

@@ -1,0 +1,17 @@
+FROM python:3.8-slim-buster
+WORKDIR /devops-hobbies
+
+# Flask app entrypoint
+ENV FLASK_APP=blue-green.py
+
+# Select blue template
+ENV html_name=app-v1.html
+
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+
+COPY blue-green.py .
+COPY templates ./templates
+
+EXPOSE 8000
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
