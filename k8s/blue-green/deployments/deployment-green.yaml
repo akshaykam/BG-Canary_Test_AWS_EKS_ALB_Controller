@@ -5,7 +5,7 @@ metadata:
   namespace: blue-green-deployment
   labels:
     app: my-python-app
-        image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:green
+    image: 543816070942.dkr.ecr.us-east-1.amazonaws.com/blue-green:green
 spec:
   replicas: 3
         env:
